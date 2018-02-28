@@ -5,13 +5,39 @@
     <title>FileReader</title>
     <style>
         .container{
-            display: block;
-            margin: 0 auto;
-            padding-top: 25%;
+            position: relative;
+        }
+        .select{
+            position: absolute;
+            padding-top: 50%;
+            padding-left: 50%;
+            transform: translateY(-50%);
         }
     </style>
 </head>
 <body>
-<input type="file" id="file" class="container" multiple/>
+<div class="container">
+    <input type="file" id="file" name="loadFiles[]" class="select" multiple/>
+</div>
+<output id="list"></output>
+<script>
+    function FileSelect(evt) {
+        //Filelist obj
+        var loadFiles = evt.target.files;
+
+        var output = [];
+        for(var i=0,f; f=loadFiles[i]; i++){
+            output.push('<li>' +
+                '<strong>','名称：',encodeURIComponent(f.name),'</strong>' +
+                '（','文件类型：',f.type || 'n/a', ')-',
+                f.size, '字节, 最后修改时间：',
+                f.lastModifiedDate.toLocaleString(),'</li>'
+                );
+        }
+        document.getElementById('list')
+            .innerHTML = '<ul>' + output.join('') + '</ul>';
+    }
+    document.getElementById('file').addEventListener("change",FileSelect,false);
+</script>
 </body>
 </html>
